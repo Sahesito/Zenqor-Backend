@@ -8,10 +8,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
+const jwt_1 = require("@nestjs/jwt");
+const auth_service_js_1 = require("./auth.service.js");
+const auth_controller_js_1 = require("./auth.controller.js");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
-    (0, common_1.Module)({})
+    (0, common_1.Module)({
+        imports: [
+            jwt_1.JwtModule.register({
+                global: true,
+                secret: process.env.JWT_SECRET || 'zenqor-secret',
+                signOptions: { expiresIn: '7d' },
+            }),
+        ],
+        controllers: [auth_controller_js_1.AuthController],
+        providers: [auth_service_js_1.AuthService],
+        exports: [auth_service_js_1.AuthService],
+    })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map
