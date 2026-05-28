@@ -53,6 +53,25 @@ let UsersService = class UsersService {
         ]);
         return { total, active };
     }
+    async deactivate(id) {
+        return this.prisma.user.update({
+            where: { id },
+            data: { isActive: false },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                isActive: true,
+            },
+        });
+    }
+    async getTotalSpent(userId) {
+        const result = await this.prisma.order.aggregate({
+            where: { userId, status: 'COMPLETED' },
+            _sum: { total: true },
+        });
+        return Number(result._sum.total || 0);
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([
