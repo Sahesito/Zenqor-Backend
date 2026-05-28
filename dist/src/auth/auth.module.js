@@ -17,10 +17,11 @@ exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            jwt_1.JwtModule.register({
-                global: true,
-                secret: process.env.JWT_SECRET || 'zenqor-secret',
-                signOptions: { expiresIn: '7d' },
+            jwt_1.JwtModule.registerAsync({
+                useFactory: () => ({
+                    secret: process.env.JWT_SECRET || 'zenqor-secret',
+                    signOptions: { expiresIn: '7d' },
+                }),
             }),
         ],
         controllers: [auth_controller_js_1.AuthController],

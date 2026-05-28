@@ -5,10 +5,11 @@ import { AuthController } from './auth.controller.js';
 
 @Module({
     imports: [
-        JwtModule.register({
-            global: true,
-            secret: process.env.JWT_SECRET || 'zenqor-secret',
-            signOptions: { expiresIn: '7d' },
+        JwtModule.registerAsync({
+            useFactory: () => ({
+                secret: process.env.JWT_SECRET || 'zenqor-secret',
+                signOptions: { expiresIn: '7d' },
+            }),
         }),
     ],
     controllers: [AuthController],

@@ -1,46 +1,73 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JwtGuard = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_1 = require("@nestjs/jwt");
+const jwt = __importStar(require("jsonwebtoken"));
 let JwtGuard = class JwtGuard {
-    jwt;
-    constructor(jwt) {
-        this.jwt = jwt;
-    }
     async canActivate(context) {
         const request = context.switchToHttp().getRequest();
         const token = this.extractToken(request);
         if (!token)
             throw new common_1.UnauthorizedException('No token provided');
         try {
-            const payload = await this.jwt.verifyAsync(token, {
-                secret: process.env.JWT_SECRET || 'zenqor-secret',
-            });
+            const payload = jwt.verify(token, process.env.JWT_SECRET || 'zenqor-secret');
             request.user = payload;
             return true;
         }
-        catch {
+        catch (e) {
+            console.error('JWT Error:', e);
             throw new common_1.UnauthorizedException('Invalid token');
         }
     }
     extractToken(request) {
-        const [type, token] = request.headers.authorization?.split(' ') ?? [];
+        const auth = request.headers?.authorization;
+        if (!auth)
+            return null;
+        const [type, token] = auth.split(' ');
         return type === 'Bearer' ? token : null;
     }
 };
 exports.JwtGuard = JwtGuard;
 exports.JwtGuard = JwtGuard = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [jwt_1.JwtService])
+    (0, common_1.Injectable)()
 ], JwtGuard);
 //# sourceMappingURL=jwt.guard.js.map
