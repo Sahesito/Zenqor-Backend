@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Body, UseGuards, Request } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { JwtGuard } from '../auth/guards/jwt.guard.js';
 
@@ -20,5 +20,21 @@ export class UsersController {
     @Patch(':id/deactivate')
     deactivate(@Param('id') id: string) {
         return this.users.deactivate(id);
+    }
+
+    @Patch('password')
+    updatePassword(
+        @Request() req: any,
+        @Body() body: { currentPassword: string; newPassword: string },
+    ) {
+        return this.users.updatePassword(req.user.sub, body.currentPassword, body.newPassword);
+    }
+
+    @Patch('profile')
+    updateProfile(
+        @Request() req: any,
+        @Body() body: { name: string; email: string; company?: string },
+    ) {
+        return this.users.updateProfile(req.user.sub, body);
     }
 }

@@ -34,4 +34,18 @@ export declare class UsersService {
         isActive: boolean;
     }>;
     getTotalSpent(userId: string): Promise<number>;
+    updatePassword(id: string, currentPassword: string, newPassword: string): Promise<{
+        message: string;
+    }>;
+    updateProfile(id: string, data: {
+        name: string;
+        email: string;
+        company?: string;
+    }): Promise<{
+        id: string;
+        name: string;
+        email: string;
+        role: import("@prisma/client").$Enums.Role;
+        company: string | null;
+    }>;
 }

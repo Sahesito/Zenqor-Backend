@@ -24,4 +24,21 @@ export declare class UsersController {
         email: string;
         isActive: boolean;
     }>;
+    updatePassword(req: any, body: {
+        currentPassword: string;
+        newPassword: string;
+    }): Promise<{
+        message: string;
+    }>;
+    updateProfile(req: any, body: {
+        name: string;
+        email: string;
+        company?: string;
+    }): Promise<{
+        id: string;
+        name: string;
+        email: string;
+        role: import("@prisma/client").$Enums.Role;
+        company: string | null;
+    }>;
 }

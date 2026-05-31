@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
+import * as bcrypt from 'bcrypt';
+import { UnauthorizedException, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
@@ -63,5 +65,39 @@ export class UsersService {
             _sum: { total: true },
         });
         return Number(result._sum.total || 0);
+    }
+
+    async updatePassword(id: string, currentPassword: string, newPassword: string) {
+        const user = await this.prisma.user.findUnique({ where: { id } });
+        if (!user) throw new NotFoundException('User not found');
+
+        const valid = await bcrypt.compare(currentPassword, user.password);
+        if (!valid) throw new UnauthorizedException('Current password is incorrect');
+
+        const hashed = await bcrypt.hash(newPassword, 10);
+        await this.prisma.user.update({
+            where: { id },
+            data: { password: hashed },
+        });
+
+        return { message: 'Password updated successfully' };
+    }
+
+    async updateProfile(id: string, data: { name: string; email: string; company?: string }) {
+        return this.prisma.user.update({
+            where: { id },
+            data: {
+                name: data.name,
+                email: data.email,
+                company: data.company,
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                company: true,
+                role: true,
+            },
+        });
     }
 }

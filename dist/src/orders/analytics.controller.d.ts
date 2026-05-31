@@ -30,12 +30,12 @@ export declare class AnalyticsController {
             productId: string;
         })[];
     } & {
-        status: import("@prisma/client").$Enums.OrderStatus;
-        total: import("@prisma/client-runtime-utils").Decimal;
         id: string;
-        notes: string | null;
         createdAt: Date;
         updatedAt: Date;
+        total: import("@prisma/client-runtime-utils").Decimal;
+        status: import("@prisma/client").$Enums.OrderStatus;
+        notes: string | null;
         userId: string;
     })[]>;
     getMonthly(): Promise<{

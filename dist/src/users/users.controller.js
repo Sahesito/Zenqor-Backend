@@ -30,6 +30,12 @@ let UsersController = class UsersController {
     deactivate(id) {
         return this.users.deactivate(id);
     }
+    updatePassword(req, body) {
+        return this.users.updatePassword(req.user.sub, body.currentPassword, body.newPassword);
+    }
+    updateProfile(req, body) {
+        return this.users.updateProfile(req.user.sub, body);
+    }
 };
 exports.UsersController = UsersController;
 __decorate([
@@ -51,6 +57,22 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "deactivate", null);
+__decorate([
+    (0, common_1.Patch)('password'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "updatePassword", null);
+__decorate([
+    (0, common_1.Patch)('profile'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "updateProfile", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.UseGuards)(jwt_guard_js_1.JwtGuard),
     (0, common_1.Controller)('users'),
