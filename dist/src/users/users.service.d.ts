@@ -3,8 +3,8 @@ export declare class UsersService {
     private prisma;
     constructor(prisma: PrismaService);
     findAll(): Promise<{
-        id: string;
         name: string;
+        id: string;
         email: string;
         role: import("@prisma/client").$Enums.Role;
         company: string | null;
@@ -15,8 +15,8 @@ export declare class UsersService {
         };
     }[]>;
     findOne(id: string): Promise<{
-        id: string;
         name: string;
+        id: string;
         email: string;
         role: import("@prisma/client").$Enums.Role;
         company: string | null;
@@ -28,8 +28,8 @@ export declare class UsersService {
         active: number;
     }>;
     deactivate(id: string): Promise<{
-        id: string;
         name: string;
+        id: string;
         email: string;
         isActive: boolean;
     }>;
@@ -42,8 +42,8 @@ export declare class UsersService {
         email: string;
         company?: string;
     }): Promise<{
-        id: string;
         name: string;
+        id: string;
         email: string;
         role: import("@prisma/client").$Enums.Role;
         company: string | null;

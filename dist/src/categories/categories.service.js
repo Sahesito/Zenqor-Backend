@@ -20,7 +20,34 @@ let CategoriesService = class CategoriesService {
     findAll() {
         return this.prisma.category.findMany({
             orderBy: { name: 'asc' },
+            include: { _count: { select: { products: true } } },
         });
+    }
+    async create(dto) {
+        const exists = await this.prisma.category.findUnique({
+            where: { name: dto.name },
+        });
+        if (exists)
+            throw new common_1.ConflictException('Category already exists');
+        return this.prisma.category.create({ data: dto });
+    }
+    async update(id, dto) {
+        const cat = await this.prisma.category.findUnique({ where: { id } });
+        if (!cat)
+            throw new common_1.NotFoundException('Category not found');
+        return this.prisma.category.update({ where: { id }, data: dto });
+    }
+    async remove(id) {
+        const cat = await this.prisma.category.findUnique({
+            where: { id },
+            include: { _count: { select: { products: true } } },
+        });
+        if (!cat)
+            throw new common_1.NotFoundException('Category not found');
+        if (cat._count.products > 0) {
+            throw new common_1.ConflictException('Cannot delete category with products');
+        }
+        return this.prisma.category.delete({ where: { id } });
     }
 };
 exports.CategoriesService = CategoriesService;

@@ -3,8 +3,8 @@ export declare class UsersController {
     private users;
     constructor(users: UsersService);
     findAll(): Promise<{
-        id: string;
         name: string;
+        id: string;
         email: string;
         role: import("@prisma/client").$Enums.Role;
         company: string | null;
@@ -19,8 +19,8 @@ export declare class UsersController {
         active: number;
     }>;
     deactivate(id: string): Promise<{
-        id: string;
         name: string;
+        id: string;
         email: string;
         isActive: boolean;
     }>;
@@ -35,8 +35,8 @@ export declare class UsersController {
         email: string;
         company?: string;
     }): Promise<{
-        id: string;
         name: string;
+        id: string;
         email: string;
         role: import("@prisma/client").$Enums.Role;
         company: string | null;
